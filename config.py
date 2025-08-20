@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
+    # Provide a default SQLite database if DATABASE_URL is not set
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///local.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
         "pool_pre_ping": True,
