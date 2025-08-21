@@ -5,8 +5,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    # Provide a default SQLite database if DATABASE_URL is not set
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///local.db')
+    # REQUIRE PostgreSQL - remove SQLite fallback
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
+    if not SQLALCHEMY_DATABASE_URI:
+        raise ValueError("DATABASE_URL environment variable is required")
+    
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
         "pool_pre_ping": True,
@@ -22,5 +25,4 @@ class ProductionConfig(Config):
     DEBUG = False
     FLASK_ENV = 'production'
 
-# Use production config by default
 config = ProductionConfig
